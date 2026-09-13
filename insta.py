@@ -58,7 +58,7 @@ def main(page: ft.Page):
     sheet = ft.BottomSheet(
         bgcolor="#121212", 
         content=ft.Column([
-            ft.Container(padding=15, alignment=ft.alignment.center, content=ft.Text("Create", color="white", size=20, weight="bold")),
+            ft.Container(padding=15, content=ft.Text("Create", color="white", size=20, weight="bold", text_align="center")),
             create_option(ft.Icons.VIDEO_LIBRARY, "Reel"),
             create_option(ft.Icons.GRID_ON, "Post"),
             create_option(ft.Icons.ADD_CIRCLE_OUTLINE, "Story")
