@@ -24,14 +24,23 @@ def main(page: ft.Page):
             d = load(); d["posts"].append({"type": t, "file": file_name.value, "caption": caption.value})
             if d["user"]: d["user"]["posts_count"] = str(len(d["posts"]))
             save(d); show_profile()
-        page.add(ft.Column([ft.Container(padding=15, content=ft.Row([ft.IconButton(icon=ft.Icons.ARROW_BACK, icon_color="white", on_click=lambda e: show_profile()), ft.Text(f"New {t}", color="white", size=18, weight="bold")])), ft.Container(padding=15, content=ft.Column([caption, file_name, ft.ElevatedButton(f"Upload {t}", on_click=do_final_upload, width=320, bgcolor="#d62976", color="white", height=50), ft.TextButton("Cancel", on_click=lambda e: show_profile())], spacing=15))], scroll=ft.ScrollMode.AUTO))
+        page.add(ft.Column([
+            ft.Container(padding=15, content=ft.Row([ft.IconButton(icon=ft.Icons.ARROW_BACK, icon_color="white", on_click=lambda e: show_profile()), ft.Text(f"New {t}", color="white", size=18, weight="bold")])),
+            ft.Container(padding=15, content=ft.Column([caption, file_name, ft.ElevatedButton(f"Upload {t}", on_click=do_final_upload, width=320, bgcolor="#d62976", color="white", height=50), ft.TextButton("Cancel", on_click=lambda e: show_profile())], spacing=15))
+        ], scroll=ft.ScrollMode.AUTO))
 
     def create_option(icon_name, text):
         def on_click(e):
             sheet.open=False; page.update(); show_upload_page(text)
         return ft.Container(padding=18, on_click=on_click, content=ft.Row([ft.Icon(icon_name, color="white", size=22), ft.Text(text, color="white", size=16)], spacing=15))
 
-    sheet = ft.BottomSheet(bgcolor="#121212", content=ft.Column([ft.Container(padding=15, content=ft.Text("Create", color="white", size=20, weight="bold", text_align="center")), create_option(ft.Icons.VIDEO_LIBRARY, "Reel"), create_option(ft.Icons.GRID_ON, "Post"), create_option(ft.Icons.ADD_CIRCLE_OUTLINE, "Story"), ft.Container(height=20)], tight=True))
+    sheet = ft.BottomSheet(bgcolor="#121212", content=ft.Column([
+        ft.Container(padding=15, content=ft.Text("Create", color="white", size=20, weight="bold", text_align="center")),
+        create_option(ft.Icons.VIDEO_LIBRARY, "Reel"),
+        create_option(ft.Icons.GRID_ON, "Post"),
+        create_option(ft.Icons.ADD_CIRCLE_OUTLINE, "Story"),
+        ft.Container(height=20)
+    ], tight=True))
     page.overlay.append(sheet)
     def open_create(e): sheet.open=True; page.update()
 
@@ -46,15 +55,22 @@ def main(page: ft.Page):
         else:
             for p in posts:
                 posts_view.append(ft.Container(bgcolor="#1a1a1a", padding=12, border_radius=10, content=ft.Row([ft.Icon(ft.Icons.VIDEO_FILE if p["type"]=="Reel" else ft.Icons.IMAGE, color="white"), ft.Column([ft.Text(p["type"], color="white", weight="bold"), ft.Text(p.get("caption",""), color="grey", size=12)])])))
-        page.add(ft.Column([ft.Container(padding=10, content=ft.Row([ft.IconButton(icon=ft.Icons.ADD, icon_color="white", on_click=open_create), ft.Text(u.get("username",""), color="white", size=20, weight="bold", expand=True), ft.Icon(ft.Icons.MENU, color="white")])), ft.Container(padding=15, content=ft.Row([ft.CircleAvatar(content=ft.Text(u.get("username","")[0].upper(), color="white", size=32), radius=42, bgcolor="#d62976"), ft.Row([ft.Column([ft.Text(u.get("posts_count","0"), color="white", weight="bold", size=18, text_align="center"), ft.Text("Posts", color="grey", size=12)], horizontal_alignment="center", expand=True), ft.Column([ft.Text(u.get("followers","0"), color="white", weight="bold", size=18, text_align="center"), ft.Text("Followers", color="grey", size=12)], horizontal_alignment="center", expand=True), ft.Column([ft.Text(u.get("following","0"), color="white", weight="bold", size=18, text_align="center"), ft.Text("Following", color="grey", size=12)], horizontal_alignment="center", expand=True)], expand=True, spacing=5)], spacing=15)), ft.Container(padding=ft.padding.only(left=15, right=15), content=ft.Column([ft.Text(u.get("name",""), color="white", weight="bold"), ft.Text("Welcome to Apna Gaon 🌾", color="white", size=13), ft.Row([ft.ElevatedButton("Edit profile", bgcolor="#262626", color="white", expand=True), ft.ElevatedButton("Share profile", bgcolor="#262626", color="white", expand=True)], spacing=8)], spacing=6)), ft.Divider(color="#262626"), ft.Column(posts_view, spacing=8)], scroll=ft.ScrollMode.AUTO, expand=True))
+
+        page.add(ft.Column([
+            ft.Container(padding=10, content=ft.Row([ft.IconButton(icon=ft.Icons.ADD, icon_color="white", on_click=open_create), ft.Text(u.get("username",""), color="white", size=20, weight="bold", expand=True), ft.Icon(ft.Icons.MENU, color="white")])),
+            ft.Container(padding=15, content=ft.Row([ft.CircleAvatar(content=ft.Text(u.get("username","")[0].upper(), color="white", size=32), radius=42, bgcolor="#d62976"), ft.Row([ft.Column([ft.Text(u.get("posts_count","0"), color="white", weight="bold", size=18, text_align="center"), ft.Text("Posts", color="grey", size=12)], horizontal_alignment="center", expand=True), ft.Column([ft.Text(u.get("followers","0"), color="white", weight="bold", size=18, text_align="center"), ft.Text("Followers", color="grey", size=12)], horizontal_alignment="center", expand=True), ft.Column([ft.Text(u.get("following","0"), color="white", weight="bold", size=18, text_align="center"), ft.Text("Following", color="grey", size=12)], horizontal_alignment="center", expand=True)], expand=True, spacing=5)], spacing=15)),
+            ft.Container(padding=15, content=ft.Column([ft.Text(u.get("name",""), color="white", weight="bold"), ft.Text("Welcome to Apna Gaon", color="white", size=13), ft.Row([ft.ElevatedButton("Edit profile", bgcolor="#262626", color="white", expand=True), ft.ElevatedButton("Share profile", bgcolor="#262626", color="white", expand=True)], spacing=8)], spacing=6)),
+            ft.Divider(color="#262626"),
+            ft.Column(posts_view, spacing=8)
+        ], scroll=ft.ScrollMode.AUTO, expand=True))
 
     def show_register():
         page.clean()
         page.vertical_alignment = ft.MainAxisAlignment.CENTER
         page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
 
-        uname = ft.TextField(label="Username", hint_text="apna naam likho", width=300, bgcolor="#121212", color="white", border_radius=12, border_color="#363636", prefix_icon=ft.Icons.PERSON_OUTLINE)
-        pwd = ft.TextField(label="Password", hint_text="password", password=True, can_reveal_password=True, width=300, bgcolor="#121212", color="white", border_radius=12, border_color="#363636", prefix_icon=ft.Icons.LOCK_OUTLINE)
+        uname = ft.TextField(label="Username", hint_text="apna naam likho", width=300, bgcolor="#121212", color="white", border_radius=12, prefix_icon=ft.Icons.PERSON_OUTLINE)
+        pwd = ft.TextField(label="Password", hint_text="password", password=True, can_reveal_password=True, width=300, bgcolor="#121212", color="white", border_radius=12, prefix_icon=ft.Icons.LOCK_OUTLINE)
 
         def do_reg(e):
             if uname.value.strip()=="": return
